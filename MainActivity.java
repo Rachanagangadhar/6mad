@@ -1,36 +1,47 @@
-package com.example.pro4;
+package com.example.pro5;
 
 import androidx.appcompat.app.AppCompatActivity;
+import android.app.AlertDialog.Builder;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements OnClickListener {
+    EditText rollno,name,marks;
+    Button insert,delete,update,viewa,viewall;
+    SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bitmap bg=Bitmap.createBitmap(720,1280,Bitmap.Config.ARGB_8888);
-        ImageView i=(ImageView)findViewById(R.id.imageView);
-        i.setBackgroundDrawable(new BitmapDrawable(bg));
-        Canvas canvas=new Canvas(bg);
-        Paint paint=new Paint();
-        paint.setColor(Color.BLUE);
-        paint.setTextSize(50);
-        canvas.drawText("Circle", 120, 150, paint);
-
-        canvas.drawCircle(200, 350, 150, paint);
-        canvas.drawText("Rectangle",420,150,paint);
-        canvas.drawRect(400,200,650,700,paint);
-        canvas.drawText("Square",120,800,paint);
-        canvas.drawRect(50,850,350,1150,paint);
-        canvas.drawText("Line",480,800,paint);
-        canvas.drawLine(520,850,520,1150,paint);
+       rollno=(EditText)findViewById(R.id.Rollno);
+       name=(EditText)findViewById(R.id.Name);
+       marks=(EditText)findViewById(R.id.Marks);
+       insert=(Button)findViewById(R.id.Insert);
+       delete=(Button)findViewById(R.id.Delete);
+       update=(Button)findViewById(R.id.Update);
+       viewa=(Button)findViewById(R.id.View);
+       viewall=(Button)findViewById(R.id.ViewAll);
+insert.setOnClickListener(this);
+delete.setOnClickListener(this);
+update.setOnClickListener(this);
+viewa.setOnClickListener(this);
+viewall.setOnClickListener(this);
+        db=SQLiteDatabase.openOrCreateDatabase("Studentdb",null);
+        db.execSQL("create table if not exists student(rollno varchar,name varchar,marks varchar);");
+    }
+    public void onClick(View view){
+        if(view==insert){
+            if(rollno.getText().toString().trim().length()==0||name.getText().toString().trim().length()==0||marks.getText().toString().trim().length()==0){
+                showMessage("Error", "Please enter all values");
+                return;
+            }
+        }
     }
 }
